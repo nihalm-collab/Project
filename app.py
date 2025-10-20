@@ -13,15 +13,22 @@ from datasets import load_dataset
 from sentence_transformers import SentenceTransformer
 import chromadb
 from chromadb.config import Settings
+from chromadb import PersistentClient
 from dotenv import load_dotenv
+from huggingface_hub import login
+
+
 
 # -----------------------------#
 # Ortam Değişkenleri
 # -----------------------------#
 load_dotenv()
+hf_token = os.getenv("HF_TOKEN")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "./persist")
-
+if hf_token:
+    login(token=hf_token)
+dataset = load_dataset("alibayram/kitapyurdu_yorumlar")
 # -----------------------------#
 # Yardımcı Fonksiyonlar
 # -----------------------------#
@@ -88,7 +95,7 @@ print("✅ Embedding tamamlandı:", embeddings.shape)
 # ChromaDB (Vektör Veritabanı)
 # -----------------------------#
 print("💾 ChromaDB oluşturuluyor...")
-client = chromadb.Client(Settings(chroma_db_impl="duckdb+parquet", persist_directory=PERSIST_DIR))
+client = PersistentClient(path=PERSIST_DIR)
 COLLECTION_NAME = "kitapyurdu_yorumlar"
 
 if COLLECTION_NAME in [c.name for c in client.list_collections()]:
