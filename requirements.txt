@@ -1,0 +1,7 @@
+datasets
+sentence-transformers
+chromadb
+faiss-cpu
+flask
+python-dotenv
+google-generativeai
