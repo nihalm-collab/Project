@@ -71,7 +71,11 @@ for i, row in enumerate(dataset[split]):
     if len(text) < 5:
         continue
     docs.append(text)
-    meta = {k: row[k] for k in row if k in ["kitap_adi", "yazar_adi", "puan", "kategori"]}
+    meta = {k: row[k] for k in ["kitap_adi", "yazar_adi", "puan", "kategori"] if row.get(k) is not None}
+if not meta:
+    meta = {"source": f"doc_{i}"}
+metadatas.append(meta)
+
     metadatas.append(meta)
     ids.append(f"doc_{i}")
 
